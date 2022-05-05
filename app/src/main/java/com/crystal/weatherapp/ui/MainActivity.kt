@@ -33,8 +33,8 @@ class MainActivity : AppCompatActivity() {
     private fun initView() {
         with(binding.swipeRefreshLayout){
             setOnRefreshListener {
+                binding.tableLayout.isGone = true
                 weatherViewModel.loadData(false)
-                isRefreshing = false
             }
         }
 
@@ -57,6 +57,7 @@ class MainActivity : AppCompatActivity() {
         data.forEach {
             setRow(it, tableLayout)
         }
+        binding.swipeRefreshLayout.isRefreshing = false
     }
 
     private fun setRow(data: WeatherLocation, tableLayout: TableLayout) {

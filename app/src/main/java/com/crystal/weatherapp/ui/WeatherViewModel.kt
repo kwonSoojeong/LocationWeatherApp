@@ -19,6 +19,9 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 class WeatherViewModel : ViewModel() {
+    companion object {
+        val TAG: String = this.javaClass.simpleName
+    }
 
     private var _progressStatus = MutableLiveData<Boolean>()
     val progressStatus: LiveData<Boolean>
@@ -28,21 +31,18 @@ class WeatherViewModel : ViewModel() {
     val locationWeatherList: LiveData<List<WeatherLocation>>
         get() = _locationWeatherList
 
+    private val retrofit = Retrofit.Builder()
+        .baseUrl(Const.WEATHER_SERVICE_URL)
+        .addConverterFactory(GsonConverterFactory.create())
+        .build()
+    private val weatherService = retrofit.create(WeatherService::class.java)
 
     fun loadData(progress: Boolean) {
         if (progress) {
             setProgressbar(true)
         }
-        //TODO retrofit module
-        val retrofit = Retrofit.Builder()
-            .baseUrl(Const.WEATHER_SERVICE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-
-        val weatherService = retrofit.create(WeatherService::class.java)
 
         CoroutineScope(Dispatchers.IO).launch {
-
             val execute = weatherService.getLocationList(Const.LOCATION_LIST_QUERY).execute()
             if (execute.isSuccessful) {
                 execute.body()?.let {
@@ -52,17 +52,16 @@ class WeatherViewModel : ViewModel() {
                             weatherService,
                             location.woeid.toString()
                         ) ?: mutableListOf()
-//                        getLocationWeather(weatherService, location)
                     }
                     _locationWeatherList.postValue(list)
                 }
 
             } else {
-                Log.e("TEST", "getLocationList Not successful")
+                Log.e(TAG, "getLocationList Not successful")
             }
-        }
-        if (progress) {
-            setProgressbar(false)
+            if (progress) {
+                setProgressbar(false)
+            }
         }
 
     }
@@ -77,7 +76,7 @@ class WeatherViewModel : ViewModel() {
                     call: Call<LocationConsolidateWeatherDto>,
                     response: Response<LocationConsolidateWeatherDto>
                 ) {
-                    Log.i(MainActivity.TAG, "getLocationWeather : ${response.body().toString()}")
+                    Log.i(TAG, "getLocationWeather : ${response.body().toString()}")
                     if (!response.isSuccessful) {
                         Log.e(MainActivity.TAG, "getLocationWeather - not successful")
                         return
@@ -92,7 +91,7 @@ class WeatherViewModel : ViewModel() {
                     call: Call<LocationConsolidateWeatherDto>,
                     t: Throwable
                 ) {
-                    Log.e(MainActivity.TAG, "getLocationWeather - ${t.message.toString()}")
+                    Log.e(TAG, "getLocationWeather - ${t.message.toString()}")
                 }
             }
         )
