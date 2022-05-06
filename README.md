@@ -4,4 +4,5 @@
 
 * 사용한 api : https://www.metaweather.com/api/
 
-![Uploading Screenshot_20220506_204903.png…]()
+![Screenshot_20220506_204903](https://user-images.githubusercontent.com/17312870/167126716-8333beeb-2785-4e9c-a86d-acc9afb75145.png)
+
