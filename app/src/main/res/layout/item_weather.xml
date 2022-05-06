@@ -33,7 +33,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="5dp"
         android:layout_marginTop="10dp"
-        tools:text="25c"
+        tools:text="25"
         android:textStyle="bold"
         android:textColor="#9A4237"
         android:textSize="14sp"

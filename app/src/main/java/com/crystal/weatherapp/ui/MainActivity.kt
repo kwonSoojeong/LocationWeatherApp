@@ -16,6 +16,9 @@ import com.crystal.weatherapp.model.WeatherLocation
 
 
 class MainActivity : AppCompatActivity() {
+    companion object {
+        val TAG: String = this.javaClass.simpleName
+    }
     private lateinit var binding: ActivityMainBinding
 
     private lateinit var weatherViewModel: WeatherViewModel
@@ -81,9 +84,5 @@ class MainActivity : AppCompatActivity() {
             row.addView(tomorrowWeather, layoutParam)
         }
         tableLayout.addView(row)
-    }
-
-    companion object {
-        val TAG: String = this.javaClass.simpleName
     }
 }
